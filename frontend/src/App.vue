@@ -1,47 +1,169 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="form-wrapper">
+    <div class="task-section">
+      <div class="form-floating">
+        <textarea
+          class="form-control"
+          placeholder="Leave a comment here"
+          id="floatingTextarea2"
+          style="height: 100px"
+        ></textarea>
+        <label for="floatingTextarea2">やりたいこと</label>
+      </div>
+      <div class="generate-block">
+        <div class="input-group">
+          <select
+            class="form-select"
+            id="inputGroupSelect04"
+            aria-label="Example select with button addon"
+          >
+            <option value="1" selected>1件</option>
+            <option value="2">2件</option>
+            <option value="3">3件</option>
+            <option value="4">4件</option>
+            <option value="5">5件</option>
+          </select>
+          <button class="btn btn-primary" type="button">生成</button>
+        </div>
+      </div>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <div>
+      <!-- <div>
+        <div class="spinner-border text-primary" role="status"></div>
+      </div> -->
+      <div>
+        <div class="card card-spacing">
+          <div class="card-body">
+            <div class="card-inner">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckChecked"
+                />
+                <label class="form-check-label" for="flexCheckChecked">
+                  生成されたタスク
+                </label>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-spacing">
+          <div class="card-body">
+            <div class="card-inner">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckChecked"
+                />
+                <label class="form-check-label" for="flexCheckChecked">
+                  生成されたタスク
+                </label>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-spacing">
+          <div class="card-body">
+            <div class="card-inner">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckChecked"
+                />
+                <label class="form-check-label" for="flexCheckChecked">
+                  生成されたタスク
+                </label>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-spacing">
+          <div class="card-body">
+            <div class="card-inner">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckChecked"
+                />
+                <label class="form-check-label" for="flexCheckChecked">
+                  生成されたタスク
+                </label>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-spacing">
+          <div class="card-body">
+            <div class="card-inner">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckChecked"
+                  checked
+                />
+                <label
+                  class="form-check-label text-decoration-line-through"
+                  for="flexCheckChecked"
+                >
+                  生成されたタスク
+                </label>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+<style scoped></style>
