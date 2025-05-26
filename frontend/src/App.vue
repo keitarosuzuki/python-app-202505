@@ -5,7 +5,9 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 export default {
   data() {
     return {
-      tasks: []
+      tasks: [],
+      newTaskText: "",
+      naturalInput: "",
     };
   },
   mounted() {
@@ -14,7 +16,53 @@ export default {
       .then((data) => {
         this.tasks = data;
       });
-  }
+  },
+  methods: {
+    addTask() {
+      if (!this.newTaskText.trim()) return;
+
+      fetch("http://localhost:5000/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: this.newTaskText }),
+      })
+        .then((res) => res.json())
+        .then((newTask) => {
+          this.tasks.push(newTask); // 即時反映！
+          this.newTaskText = "";
+        });
+    },
+    deleteTask(id) {
+      fetch(`http://localhost:5000/api/tasks/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => {
+          if (res.ok) {
+            this.tasks = this.tasks.filter((task) => task.id !== id);
+          }
+        });
+    },
+    generateTasks() {
+      if (!this.naturalInput.trim()) return;
+
+      fetch("http://localhost:5000/api/generate-tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: this.naturalInput }),
+      })
+        .then((res) => res.json())
+        .then((generatedTasks) => {
+          console.log("生成結果:", generatedTasks);
+          this.tasks = [...this.tasks, ...generatedTasks];
+          this.naturalInput = "";
+        })
+        .catch((err) => {
+          console.error("生成エラー:", err);
+        });
+    },
+  },
 }
 </script>
 
@@ -22,8 +70,8 @@ export default {
   <div class="form-wrapper">
     <div class="task-section">
       <div class="form-floating">
-        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-          style="height: 100px"></textarea>
+        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"
+          v-model="naturalInput"></textarea>
         <label for="floatingTextarea2">やりたいこと</label>
       </div>
       <div class="generate-block">
@@ -35,7 +83,7 @@ export default {
             <option value="4">4件</option>
             <option value="5">5件</option>
           </select>
-          <button class="btn btn-primary" type="button">生成</button>
+          <button class="btn btn-primary" type="button" @click="generateTasks">生成</button>
         </div>
       </div>
     </div>
@@ -44,77 +92,17 @@ export default {
         <div class="spinner-border text-primary" role="status"></div>
       </div> -->
       <div>
-        <div class="card card-spacing">
+        <div class="card card-spacing" v-for="task in tasks" :key="task.id">
           <div class="card-body">
             <div class="card-inner">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
                 <label class="form-check-label" for="flexCheckChecked">
-                  生成されたタスク
+                  {{ task.text }}
                 </label>
               </div>
               <div>
-                <button type="button" class="btn-close" aria-label="Close"></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card card-spacing">
-          <div class="card-body">
-            <div class="card-inner">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
-                <label class="form-check-label" for="flexCheckChecked">
-                  生成されたタスク
-                </label>
-              </div>
-              <div>
-                <button type="button" class="btn-close" aria-label="Close"></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card card-spacing">
-          <div class="card-body">
-            <div class="card-inner">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
-                <label class="form-check-label" for="flexCheckChecked">
-                  生成されたタスク
-                </label>
-              </div>
-              <div>
-                <button type="button" class="btn-close" aria-label="Close"></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card card-spacing">
-          <div class="card-body">
-            <div class="card-inner">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
-                <label class="form-check-label" for="flexCheckChecked">
-                  生成されたタスク
-                </label>
-              </div>
-              <div>
-                <button type="button" class="btn-close" aria-label="Close"></button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card card-spacing">
-          <div class="card-body">
-            <div class="card-inner">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked />
-                <label class="form-check-label text-decoration-line-through" for="flexCheckChecked">
-                  生成されたタスク
-                </label>
-              </div>
-              <div>
-                <button type="button" class="btn-close" aria-label="Close"></button>
+                <button type="button" class="btn-close" aria-label="Close" @click="deleteTask(task.id)"></button>
               </div>
             </div>
           </div>
