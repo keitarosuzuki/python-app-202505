@@ -6,34 +6,11 @@ export default {
   data() {
     return {
       tasks: [],
-      newTaskText: "",
       naturalInput: "",
+      taskCount: "1",
     };
   },
-  mounted() {
-    fetch("http://localhost:5000/api/tasks")
-      .then((res) => res.json())
-      .then((data) => {
-        this.tasks = data;
-      });
-  },
   methods: {
-    addTask() {
-      if (!this.newTaskText.trim()) return;
-
-      fetch("http://localhost:5000/api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: this.newTaskText }),
-      })
-        .then((res) => res.json())
-        .then((newTask) => {
-          this.tasks.push(newTask); // 即時反映！
-          this.newTaskText = "";
-        });
-    },
     deleteTask(id) {
       fetch(`http://localhost:5000/api/tasks/${id}`, {
         method: "DELETE",
@@ -50,11 +27,16 @@ export default {
       fetch("http://localhost:5000/api/generate-tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: this.naturalInput }),
+        body: JSON.stringify(
+          {
+            text: this.naturalInput,
+            count: this.taskCount,
+          }
+        ),
       })
         .then((res) => res.json())
         .then((generatedTasks) => {
-          console.log("生成結果:", generatedTasks);
+          this.tasks = []
           this.tasks = [...this.tasks, ...generatedTasks];
           this.naturalInput = "";
         })
@@ -76,8 +58,9 @@ export default {
       </div>
       <div class="generate-block">
         <div class="input-group">
-          <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-            <option value="1" selected>1件</option>
+          <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon"
+            v-model="taskCount">
+            <option value="1">1件</option>
             <option value="2">2件</option>
             <option value="3">3件</option>
             <option value="4">4件</option>

@@ -9,10 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # 仮のタスク一覧（リロードでリセット）
-tasks = [
-    {"id": 1, "text": "FlaskでAPI作成", "status": "未着手"},
-    {"id": 2, "text": "Vueと接続する", "status": "未着手"},
-]
+tasks = []
 
 @app.route("/api/tasks", methods=["GET"])
 def get_tasks():
@@ -38,17 +35,21 @@ def delete_task(task_id):
 @app.route("/api/generate-tasks", methods=["POST"])
 def generate_tasks():
     data = request.json
-    user_input = data.get("text", "")
+    user_input_text = data.get("text", "")
+    user_input_count = data.get("count", "")
 
     prompt = f"""
-    以下のやりたいことを、5つの具体的な作業タスクに日本語で分解してください。
+    以下のやりたいことを、指定された件数の具体的な作業タスクに日本語で分解してください。
 
     やりたいこと:
-    {user_input}
+    {user_input_text}
+
+    件数:
+    {user_input_count}
 
     出力形式（JSON）:
     [
-        {{ "text": "◯◯を作る", "status": "未着手" }},
+        {{ "text": "◯◯を作る" }},
         ...
     ]
     """
@@ -59,7 +60,7 @@ def generate_tasks():
     }
 
     body = {
-        "model": "openai/gpt-3.5-turbo",  # または他の無料モデル
+        "model": "openai/gpt-3.5-turbo",
         "messages": [
             {"role": "user", "content": prompt}
         ]
