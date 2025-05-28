@@ -7,30 +7,6 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-
-# 仮のタスク一覧（リロードでリセット）
-tasks = []
-
-@app.route("/api/tasks", methods=["GET"])
-def get_tasks():
-    return jsonify(tasks)
-  
-@app.route("/api/tasks", methods=["POST"])
-def add_task():
-    data = request.json
-    new_task = {
-        "id": len(tasks) + 1,
-        "text": data["text"],
-        "status": "未着手"
-    }
-    tasks.append(new_task)
-    return jsonify(new_task), 201
-  
-@app.route("/api/tasks/<int:task_id>", methods=["DELETE"])
-def delete_task(task_id):
-    global tasks
-    tasks = [task for task in tasks if task["id"] != task_id]
-    return jsonify({"message": f"タスク {task_id} を削除しました"}), 200
   
 @app.route("/api/generate-tasks", methods=["POST"])
 def generate_tasks():
@@ -49,7 +25,7 @@ def generate_tasks():
 
     出力形式（JSON）:
     [
-        {{ "text": "◯◯を作る" }},
+        {{ "id": 1, "text": "◯◯を作る" }},
         ...
     ]
     """

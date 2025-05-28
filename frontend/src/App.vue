@@ -8,21 +8,37 @@ export default {
       tasks: [],
       naturalInput: "",
       taskCount: "1",
+      inputError: false,
     };
   },
+  mounted() {
+    window.addEventListener("beforeunload", this.handleBeforeUnload);
+  },
+  beforeUnmount() {
+    window.removeEventListener("beforeunload", this.handleBeforeUnload);
+  },
   methods: {
+    handleBeforeUnload(e) {
+      if (this.tasks.length > 0) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    },
     deleteTask(id) {
-      fetch(`http://localhost:5000/api/tasks/${id}`, {
-        method: "DELETE",
-      })
-        .then((res) => {
-          if (res.ok) {
-            this.tasks = this.tasks.filter((task) => task.id !== id);
-          }
-        });
+      this.tasks = this.tasks.filter((task) => task.id !== id);
     },
     generateTasks() {
-      if (!this.naturalInput.trim()) return;
+      if (!this.naturalInput.trim()) {
+        this.inputError = true;
+        return;
+      }
+
+      this.inputError = false;
+
+      if (this.tasks.length > 0) {
+        const ok = confirm("すでにタスクがあります。生成すると上書きされますが、よろしいですか？");
+        if (!ok) return;
+      }
 
       fetch("http://localhost:5000/api/generate-tasks", {
         method: "POST",
@@ -36,8 +52,8 @@ export default {
       })
         .then((res) => res.json())
         .then((generatedTasks) => {
-          this.tasks = []
-          this.tasks = [...this.tasks, ...generatedTasks];
+          this.tasks = [];
+          this.tasks = generatedTasks;
           this.naturalInput = "";
         })
         .catch((err) => {
@@ -53,7 +69,7 @@ export default {
     <div class="task-section">
       <div class="form-floating">
         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"
-          v-model="naturalInput"></textarea>
+          v-model="naturalInput" :class="{ 'is-invalid': inputError }"></textarea>
         <label for="floatingTextarea2">やりたいこと</label>
       </div>
       <div class="generate-block">
@@ -71,9 +87,6 @@ export default {
       </div>
     </div>
     <div>
-      <!-- <div>
-        <div class="spinner-border text-primary" role="status"></div>
-      </div> -->
       <div>
         <div class="card card-spacing" v-for="task in tasks" :key="task.id">
           <div class="card-body">
