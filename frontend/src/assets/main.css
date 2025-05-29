@@ -1,6 +1,10 @@
+* {
+  border-width: 3px !important;
+}
+
 .form-wrapper {
   margin: 0 auto;
-  width: 50%;
+  width: 40%;
 }
 
 .task-section {
@@ -8,7 +12,7 @@
 }
 
 .generate-block {
-  margin: 0 280px;
+  margin: 0 300px;
   padding: 10px 0;
   display: flex;
   justify-content: center;

@@ -82,7 +82,7 @@ export default {
             <option value="4">4件</option>
             <option value="5">5件</option>
           </select>
-          <button class="btn btn-primary" type="button" @click="generateTasks">生成</button>
+          <button class="btn btn-info" type="button" @click="generateTasks">生成</button>
         </div>
       </div>
     </div>
@@ -92,8 +92,9 @@ export default {
           <div class="card-body">
             <div class="card-inner">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
-                <label class="form-check-label" for="flexCheckChecked">
+                <input class="form-check-input" type="checkbox" v-model="task.done" :id="'task-' + task.id" />
+                <label class="form-check-label" :for="'task-' + task.id"
+                  :class="{ 'text-decoration-line-through': task.done }">
                   {{ task.text }}
                 </label>
               </div>

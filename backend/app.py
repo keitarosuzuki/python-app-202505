@@ -25,7 +25,7 @@ def generate_tasks():
 
     出力形式（JSON）:
     [
-        {{ "id": 1, "text": "◯◯を作る" }},
+        {{ "id": 1, "text": "◯◯を作る", "done": true }},
         ...
     ]
     """
